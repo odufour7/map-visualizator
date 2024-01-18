@@ -80,21 +80,21 @@ def create_map(center: Tuple[float, float], tile_layer, zoom: int = 16) -> foliu
     """
     m = folium.Map(location=center, zoom_start=zoom, tiles=tile_layer,  max_zoom = 21)
     camera_layers = [folium.FeatureGroup(name=key, show=True).add_to(m) for key in cameras.keys()]  # Create a layer/group for each camera
-    polygon_layers = [folium.FeatureGroup(name="field "+key, show=True, overlay=True).add_to(m) for key in cameras.keys() ] # Create a layer/group for each polygon
+    # polygon_layers = [folium.FeatureGroup(name="field "+key, show=True, overlay=True).add_to(m) for key in cameras.keys() ] # Create a layer/group for each polygon
     
-    polygons = [
-        folium.PolyLine(
-            locations=camera.field,
-            tooltip="field " +key,
-            fill_color="blue",
-            color=None,
-            fill_opacity=0.1,
-            fill=True,
-        )
-        for key, camera in cameras.items()]
+    # polygons = [
+    #     folium.PolyLine(
+    #         locations=camera.field,
+    #         tooltip="field " +key,
+    #         fill_color="blue",
+    #         color=None,
+    #         fill_opacity=0.1,
+    #         fill=True,
+    #     )
+    #     for key, camera in cameras.items()]
             
-    for polygon, layer in zip(polygons, polygon_layers): # Add polygons to the map
-        polygon.add_to(layer)
+    # for polygon, layer in zip(polygons, polygon_layers): # Add polygons to the map
+    #     polygon.add_to(layer)
 
     for (key, camera), layer in zip(cameras.items(), camera_layers): # Add markers to the map
         icon = CustomIcon(camera.logo, icon_size=(110, 110) )
