@@ -490,7 +490,7 @@ def main(selected_file: str) -> None:
     fig = create_animation_plotly(
         pd_trajs, pd_geometry, show_polygons, min_velocity, max_velocity
     )
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width="stretch")
 
 
 def run_tab_animation(selected_file: str) -> None:
