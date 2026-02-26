@@ -12,6 +12,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
+import plotly.io as pio
 import seaborn as sns
 import streamlit as st
 from matplotlib import colormaps
@@ -586,13 +587,18 @@ def main() -> None:
         # Plot cumulative contacts
         cumulative_fig = plot_cumulative_contacts(contacts_data)
         st.plotly_chart(cumulative_fig)
-        # Convert the Plotly figure to PDF bytes
-        cumulative_img_bytes = cumulative_fig.to_image(format="pdf")
+        # Convert the Plotly figure to HTML format for downloading
+        html_fig = pio.to_html(
+            cumulative_fig,
+            full_html=True,
+            include_plotlyjs="cdn",
+        )
         # Download button for the cumulative contacts chart
         st.sidebar.download_button(
-            label="Download Cumulative",
-            data=cumulative_img_bytes,
-            file_name="cumulative_contacts.pdf",
+            label="Download Cumulative (HTML)",
+            data=html_fig,
+            file_name="cumulative_contacts.html",
+            mime="text/html",
         )
 
     elif plot_option == "Contacts Map":
@@ -606,10 +612,10 @@ def main() -> None:
         st_folium(my_map, width=625, height=600)
         # Download the map as pdf file
         st.sidebar.download_button(
-            label="Download Map",
-            data=my_map._to_png(),
-            file_name="contacts_map.png",
-            mime="image/png",
+            label="Download Map (HTML)",
+            data=my_map.get_root().render(),  # ._to_png(),
+            file_name="contacts_map.html",
+            mime="text/html",
         )
 
 
