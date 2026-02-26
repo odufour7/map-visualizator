@@ -36,7 +36,6 @@ def transform_polygon(polygon: Polygon) -> Polygon:
 
     Returns:
         Polygon: The transformed polygon.
-
     """
     # Initialize the transformer from RGF93 (EPSG:2154) to WGS84 (EPSG:4326)
     transformer = Transformer.from_crs("EPSG:2154", "EPSG:4326", always_xy=True)
@@ -53,11 +52,11 @@ def trajs_from_rgf93_to_wgs84(trajs: pd.DataFrame) -> pd.DataFrame:
     """
     Convert the coordinates in the 'trajs' DataFrame from RGF93 (EPSG:2154) to WGS84 (EPSG:4326).
 
-    Parameters:
-    trajs (pd.DataFrame): DataFrame containing trajectory data with RGF93 coordinates.
+    Args:
+        trajs (pd.DataFrame): DataFrame containing trajectory data with RGF93 coordinates.
 
     Returns:
-    pd.DataFrame: DataFrame with converted coordinates in WGS84 format.
+        pd.DataFrame: DataFrame with converted coordinates in WGS84 format.
     """
     # Initialize the transformer from RGF93 (EPSG:2154) to WGS84 (EPSG:4326)
     transformer = Transformer.from_crs("EPSG:2154", "EPSG:4326", always_xy=True)
@@ -218,7 +217,6 @@ def compute_pedestrian_velocity(df: pd.DataFrame) -> pd.DataFrame:
 
     Returns:
         pd.DataFrame: DataFrame with additional columns for calculated velocities.
-
     """
     # Calculate velocities
     # Convert the coordinates from degrees to meters
@@ -273,11 +271,12 @@ def degrees_to_meters(lat: float, lon: float) -> Tuple[float, float]:
     """
     Convert latitude and longitude coordinates from degrees to meters.
 
-    Parameters:
-    lat (float): Latitude coordinate in degrees.
-    lon (float): Longitude coordinate in degrees.
+    Args:
+        lat (float): Latitude coordinate in degrees.
+        lon (float): Longitude coordinate in degrees.
+
     Returns:
-    tuple: A tuple containing the converted x and y coordinates in meters.
+        Tuple[float, float]: A tuple containing the converted x and y coordinates in meters.
     """
     R = 6371000  # Radius of Earth in meters
     lat_rad = np.radians(lat)
@@ -307,9 +306,6 @@ def prepare_data(
 
     Args:
         traj_path (Path): The path to the directory containing trajectory files.
-
-    Returns:
-        None
     """
 
     selected_pickle = str(
@@ -448,9 +444,8 @@ def extract_gps_data_from_csv_geometry(file_path: Path) -> pd.DataFrame:
 
 
 def main(selected_file: str) -> None:
-    """
-    Main function to run the Streamlit app.
-    """
+    """Main function to run the Streamlit app."""
+
     path = Path(__file__)
     # TODO: use session_state
     TRAJ_PATH = Path(path.parent.parent.parent.absolute() / "data" / "trajectories")
@@ -502,10 +497,7 @@ def run_tab_animation(selected_file: str) -> None:
     """
     Run the animation tab with the selected file.
 
-    Parameters:
+    Args:
         selected_file (str): The path of the selected file.
-
-    Returns:
-        None
     """
     main(selected_file)

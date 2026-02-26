@@ -24,12 +24,9 @@ def load_and_process_contacts_data(csv_path: Path, pickle_path: Path) -> None:
     """
     Load and process contacts data from a CSV file.
 
-    Parameters:
-    - csv_path (Path): The path to the CSV file containing the contacts data.
-    - pickle_path (Path): The path to save the processed data as a pickle file.
-
-    Returns:
-    None
+    Args:
+        csv_path (Path): The path to the CSV file containing the contacts data.
+        pickle_path (Path): The path to save the processed data as a pickle file.
     """
     # Load the data
     df = pd.read_csv(csv_path / "Contacts.csv")
@@ -61,12 +58,11 @@ def convert_to_timedelta(time_str: str) -> pd.Timedelta:
     """
     Convert a string representation of time to a pandas Timedelta object.
 
-    Parameters:
+    Args:
         time_str (str): The string representation of time in the format "HH:MM:SS.micros".
 
     Returns:
         pd.Timedelta: The converted time as a pandas Timedelta object.
-
     """
     if pd.isna(time_str):
         return pd.NaT
@@ -121,9 +117,6 @@ def process_gpx(gpx_path: Path, pickle_path: Path) -> None:
     Args:
         gpx_path (Path): The path to the folder containing GPX files.
         pickle_path (Path): The path to save the pickle file.
-
-    Returns:
-        None
     """
     # Initialize an empty list to collect data
     data = []
@@ -159,7 +152,6 @@ def parse_gpx_file(
                 - latitude (float): The latitude coordinate.
                 - longitude (float): The longitude coordinate.
                 - time (datetime): The timestamp of the data point.
-
     """
     name_subj = str(filename.stem)
     data: List[Dict[str, Union[str, float, Optional[datetime]]]] = []
@@ -191,11 +183,8 @@ def process_tracks_data(pickle_path: Path) -> None:
     6. Drop duplicate rows where 'time_seconds' is the same but keep the first one.
     7. Save the processed DataFrame to a pickle file.
 
-    Parameters:
-    - pickle_path (Path): The path to the pickle file.
-
-    Returns:
-    - None
+    Args:
+        pickle_path (Path): The path to the pickle file.
     """
     # Load all tracks
     all_gps_tracks = pd.read_pickle(pickle_path / "all_gps_tracks.pkl")
@@ -231,9 +220,6 @@ def merge_contacts_and_gps_data(path_pickle: Path) -> None:
     Args:
         contacts_path (Path): The path to the contacts data directory.
         output_path (Path): The path to the output directory.
-
-    Returns:
-        None
     """
     # Load all tracks
     df1 = pd.read_pickle(path_pickle / "contacts_data_melted.pkl")
@@ -289,8 +275,9 @@ def interpolate_data(group: pd.DataFrame) -> pd.DataFrame:
     """
     Interpolates missing data in a group of GPS contacts.
 
-    Parameters:
+    Args:
         group (DataFrame): A pandas DataFrame containing GPS contact data.
+
     Returns:
         DataFrame: A pandas DataFrame with missing data interpolated.
     """
@@ -346,7 +333,7 @@ def initialize_map() -> folium.Map:
         45.76714745916146,
         4.833552178368124,
     ]
-    return folium.Map(location=map_center, zoom_start=17.5)
+    return folium.Map(location=map_center, zoom_start=17)
 
 
 def add_tile_layer(map_object: folium.Map) -> None:
@@ -389,7 +376,7 @@ def plot_gps_tracks(map_object: folium.Map, all_gps_tracks: pd.DataFrame) -> Non
             opacity=1,
             name=name_subj,
             popup=name_subj,
-        ).add_to(map_object)
+        ).add_to(map_object)  # type: ignore[no-untyped-call]
 
 
 def add_contact_markers(
@@ -419,7 +406,7 @@ def plot_histogram(
     """
     Plot a histogram of the total number of collisions.
 
-    Parameters:
+    Args:
         df (pd.DataFrame): The DataFrame containing the data.
         bins (int): The number of bins for the histogram.
         log_plot (Tuple[bool, bool]): A tuple indicating whether to use a logarithmic scale for
@@ -456,6 +443,7 @@ def plot_cumulative_contacts(df: pd.DataFrame) -> Figure:
 
     Args:
         df (pd.DataFrame): The input DataFrame containing contact data.
+
     Returns:
         Figure: The generated plot.
     """
@@ -520,9 +508,6 @@ def main() -> None:
        - Displays a cumulative contacts plot.
        - Displays a map of GPS trajectories coupled with contact locations.
     6. Provides download buttons for the generated plots and map.
-
-    Returns:
-        None
     """
     # TODO: we should handle these directories in Dataclass.
     path = Path(__file__).resolve()
@@ -629,15 +614,5 @@ def main() -> None:
 
 
 def run_tab_contact() -> None:
-    """
-    Run the contact tab.
-
-    This function calls the main function to execute the contact tab.
-
-    Parameters:
-    None
-
-    Returns:
-    None
-    """
+    """Run the contact tab."""
     main()

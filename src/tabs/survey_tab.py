@@ -12,17 +12,20 @@ def histogram_survey(df_survey: pd.DataFrame, remove_outlier: bool) -> Figure:
     """
     Generate a histogram visualization of group sizes from a survey DataFrame.
 
-    Parameters:
+    Args:
         df_survey (pd.DataFrame): The survey data containing group sizes.
         remove_outlier (bool): Flag to indicate whether to remove the maximum value as an outlier.
+
     Returns:
         Figure: A Plotly Figure object containing the histogram visualization.
-    The function performs the following steps:
-        1. Extracts the 'Children' and 'total' columns from the DataFrame.
-        2. Optionally removes the maximum value from the 'total' column if outliers should be excluded.
-        3. Initializes a Plotly Figure and adds histogram traces for 'Children' and 'total' categories.
-        4. Updates the hover template with custom data for better interactivity.
-        5. Configures the layout for improved visualization, including titles and axis labels.
+
+    Note:
+        The function performs the following steps:
+            1. Extracts the 'Children' and 'total' columns from the DataFrame.
+            2. Optionally removes the maximum value from the 'total' column if outliers should be excluded.
+            3. Initializes a Plotly Figure and adds histogram traces for 'Children' and 'total' categories.
+            4. Updates the hover template with custom data for better interactivity.
+            5. Configures the layout for improved visualization, including titles and axis labels.
     """
     # Extract values from the DataFrame
     values_children = df_survey["Children"].fillna(0).tolist()
@@ -89,14 +92,14 @@ def main() -> None:
     Visualize survey results.
 
     This function performs the following steps:
-    1. Determines the path to the survey results CSV file and the pickle directory.
-    2. Checks if a pickle file of the survey results exists:
-       - If it exists, loads the survey results from the pickle file.
-       - If it does not exist, reads the survey results from the CSV file, fills missing values,
-         and saves it as a pickle file.
-    3. Provides a sidebar option to remove outliers from the survey results.
-    4. Generates and displays a histogram of the survey results.
-    5. Provides a sidebar button to download the histogram as a PDF file.
+        1. Determines the path to the survey results CSV file and the pickle directory.
+        2. Checks if a pickle file of the survey results exists:
+        - If it exists, loads the survey results from the pickle file.
+        - If it does not exist, reads the survey results from the CSV file, fills missing values,
+            and saves it as a pickle file.
+        3. Provides a sidebar option to remove outliers from the survey results.
+        4. Generates and displays a histogram of the survey results.
+        5. Provides a sidebar button to download the histogram as a PDF file.
     """
     path = Path(__file__).resolve()
     survey_path = (

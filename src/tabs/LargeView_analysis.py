@@ -16,7 +16,6 @@ import streamlit as st
 from numba import njit
 from numpy.typing import NDArray
 from scipy.signal import butter, filtfilt
-from tqdm import tqdm
 
 plt.rcParams["font.family"] = "STIXGeneral"
 
@@ -84,7 +83,7 @@ def calculate_distance(pos1: Tuple[float, float], pos2: Tuple[float, float]) -> 
     """
     Calculate the distance between two points.
 
-    Parameters:
+    Args:
     - pos1 (Tuple[float, float]): The coordinates of the first point.
     - pos2 (Tuple[float, float]): The coordinates of the second point.
 
@@ -99,7 +98,7 @@ def gaussian_kernel_scalar(r: float, r_c: float, xi: float) -> float:
     """
     Calculate the value of a Gaussian kernel for a given distance.
 
-    Parameters:
+    Args:
         r (float): The distance at which to evaluate the kernel.
         r_c (float): The cutoff distance. If the distance is greater than this value, the kernel value is 0.
         xi (float): The width parameter of the Gaussian kernel.
@@ -121,7 +120,7 @@ def get_r(
     """
     Calculate the coordinates (x, y) of a point in a grid based on its indices and grid parameters.
 
-    Parameters:
+    Args:
     - i_line (int): The index of the line in the grid.
     - j_column (int): The index of the column in the grid.
     - r_cg (float): The size of each grid cell.
@@ -136,12 +135,12 @@ def get_r(
 
 @njit  # type: ignore
 def get_cell(
-    r: Tuple[float, float], x_min: float, y_min, r_cg: float
+    r: Tuple[float, float], x_min: float, y_min: float, r_cg: float
 ) -> Tuple[int, int]:
     """
     Return the cell indices corresponding to the given coordinates.
 
-    Parameters:
+    Args:
     r (tuple): The coordinates (x, y) of the point.
     x_min (float): The minimum x-coordinate of the grid.
     y_min: The minimum y-coordinate of the grid.
@@ -165,7 +164,7 @@ def butter_lowpass_filter(
     """
     Apply a Butterworth lowpass filter to a pandas Series.
 
-    Parameters:
+    Args:
         pd_series (pd.Series): The input pandas Series to be filtered.
         delta_t (float): The time interval between samples.
         order (int): The order of the filter.
@@ -191,7 +190,7 @@ def read_and_process_file(filepath: Path) -> pd.DataFrame:
     """
     Read a CSV file from the given filepath and processes it into a pandas DataFrame.
 
-    Parameters:
+    Args:
         filepath (Path): The path to the CSV file.
 
     Returns:
@@ -359,9 +358,6 @@ def save_data(data_to_save: Any, folder_save: Path, title: str) -> None:
         data_to_save: The data to be saved.
         folder_save: The folder where the data will be saved.
         title: The title of the file.
-
-    Returns:
-        None
     """
     with open(folder_save / title, "wb") as mydumpfile:
         pickle.dump(data_to_save, mydumpfile)
@@ -377,7 +373,6 @@ def load_data(folder_save: Path, title: str) -> Any:
 
     Returns:
         Any
-
     """
     with open(folder_save / title, "rb") as myloadfile:
         return pickle.load(myloadfile)
@@ -389,9 +384,6 @@ def calculate_grid_dimensions(pa: Parameters) -> None:
 
     Args:
         pa (Parameters): The parameters object containing the necessary information.
-
-    Returns:
-        None
     """
     # TODO: Oscar: Check conversion of the float Delta to int.
     pa.NB_CG_X = int((pa.X_MAX - pa.X_MIN) / pa.R_CG) + int(pa.DELTA) + 2
@@ -402,7 +394,7 @@ def initialize_dict(nb_cg_x: int, nb_cg_y: int) -> Dict[str, NDArray[np.float64]
     """
     Initialize a dictionary of density and velocity fields.
 
-    Parameters:
+    Args:
         nb_cg_x (int): Number of grid points along the x-axis.
         nb_cg_y (int): Number of grid points along the y-axis.
 
@@ -434,7 +426,7 @@ def compute_fields(
     """
     nb_traj = len(all_trajs)
     # Iterate over all trajectories
-    for i_traj, traj in tqdm(enumerate(all_trajs.values()), desc="Processing grid..."):
+    for i_traj, traj in enumerate(all_trajs.values()):
         traj = traj.loc[
             (traj["t_s"] >= pa.START_TIME)
             & (traj["t_s"] < pa.START_TIME + pa.DURATION + 2.0 * pa.DT)
@@ -502,7 +494,7 @@ def normalize_density(
     """
     Normalize the density array based on the given parameters.
 
-    Parameters:
+    Args:
     - density (NDArray[np.float64]): The density array to be normalized.
     - pa (Parameters): The parameters object containing the necessary values.
 
@@ -530,7 +522,6 @@ def update_figure(
 
     Returns:
         go.Figure: The updated figure with the heatmap and quiver plot.
-
     """
     # Create the X and Y axes
     X_axis = np.linspace(
@@ -549,7 +540,7 @@ def update_figure(
         hovertext = np.array(
             [
                 [
-                    f"x: {X_axis[i]:.2f} m<br>y: {Y_axis[j]:.2f} m<br>Density: {df_observables['rho'][j,i]:.2f} ped/m²"
+                    f"x: {X_axis[i]:.2f} m<br>y: {Y_axis[j]:.2f} m<br>Density: {df_observables['rho'][j, i]:.2f} ped/m²"
                     for i in range(df_observables["rho"].shape[1])
                 ]
                 for j in range(df_observables["rho"].shape[0])
@@ -574,7 +565,7 @@ def update_figure(
         hovertext = np.array(
             [
                 [
-                    f"x: {X_axis[i]:.2f} m<br>y: {Y_axis[j]:.2f} m<br>Var_v: {(df_observables['var_vs'][j,i]):.2f} m²/s²"
+                    f"x: {X_axis[i]:.2f} m<br>y: {Y_axis[j]:.2f} m<br>Var_v: {(df_observables['var_vs'][j, i]):.2f} m²/s²"
                     for i in range(df_observables["var_vs"].shape[1])
                 ]
                 for j in range(df_observables["var_vs"].shape[0])
@@ -684,9 +675,6 @@ def main(selected_file: str) -> None:
 
     Args:
         selected_file (str): The path to the selected file.
-
-    Returns:
-        None
     """
     # Sidebar for settings
     st.sidebar.title("Settings")
@@ -809,10 +797,7 @@ def run_cctv_analysis(selected_file: str) -> None:
     """
     Run the animation tab with the selected file.
 
-    Parameters:
+    Args:
         selected_file (str): The path of the selected file.
-
-    Returns:
-        None
     """
     main(selected_file)

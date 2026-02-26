@@ -345,7 +345,7 @@ def calculate_fd_voronoi_local(dv: Optional[int]) -> None:
 
         show_fig(fig, figname=str(figname), html=True, write=True)
         end = time.time()
-        st.info(f"Computation time: {end-start:.2f} seconds.")
+        st.info(f"Computation time: {end - start:.2f} seconds.")
 
     if calculate and Path(figname).exists():
         download_file(figname, msg)

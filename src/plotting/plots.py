@@ -342,7 +342,7 @@ def plot_fundamental_diagram_all(
                     "symbol": marker_shapes[i % len(marker_shapes)],
                 },
                 mode="markers",
-                name=f"{filenames[i%len(filenames)]}",
+                name=f"{filenames[i % len(filenames)]}",
                 showlegend=True,
             )
         )
@@ -497,9 +497,6 @@ def show_fig(
         html (bool, optional): Flag to determine if the figure should be shown as HTML. Defaults to False.
         write (bool, optional): Flag to write the fig as a file and make a download button
         height (int, optional): Height of the HTML component if displayed as HTML. Defaults to 500.
-
-    Returns:
-        None
     """
     if not html:
         st.plotly_chart(fig)
