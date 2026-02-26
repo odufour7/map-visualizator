@@ -4,6 +4,7 @@ from pathlib import Path
 
 import pandas as pd
 import plotly.graph_objects as go
+import plotly.io as pio
 import streamlit as st
 from plotly.graph_objects import Figure
 
@@ -94,9 +95,8 @@ def main() -> None:
     This function performs the following steps:
         1. Determines the path to the survey results CSV file and the pickle directory.
         2. Checks if a pickle file of the survey results exists:
-        - If it exists, loads the survey results from the pickle file.
-        - If it does not exist, reads the survey results from the CSV file, fills missing values,
-            and saves it as a pickle file.
+            - If it exists, loads the survey results from the pickle file.
+            - If it does not exist, reads the survey results from the CSV file, fills missing values, and saves it as a pickle file.
         3. Provides a sidebar option to remove outliers from the survey results.
         4. Generates and displays a histogram of the survey results.
         5. Provides a sidebar button to download the histogram as a PDF file.
@@ -122,20 +122,20 @@ def main() -> None:
     # Histogram of the survey results
     fig = histogram_survey(df_survey, remove_outlier)
     st.plotly_chart(fig)
-    # Streamlit button in the sidebar to download the graph in PDF format
+    html_fig = pio.to_html(
+        fig,
+        full_html=True,
+        include_plotlyjs="cdn",
+    )
+    # Streamlit button in the sidebar to download the graph in HTML format
     st.sidebar.download_button(
-        label="Download Survey Histogram",
-        data=fig.to_image(format="pdf"),
-        file_name="survey_results.pdf",
+        label="Download Survey Histogram (HTML)",
+        data=html_fig,
+        file_name="survey_results.html",
+        mime="text/html",
     )
 
 
 def run_tab_survey() -> None:
-    """
-    Execute the main function for the survey tab.
-
-    This function serves as the entry point for running the survey tab
-    functionality within the application. It calls the main() function
-    to initiate the necessary processes.
-    """
+    """Execute the main function for the survey tab."""
     main()

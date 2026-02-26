@@ -613,7 +613,7 @@ def main() -> None:
         # Download the map as pdf file
         st.sidebar.download_button(
             label="Download Map (HTML)",
-            data=my_map.get_root().render(),  # ._to_png(),
+            data=my_map.get_root().render(),
             file_name="contacts_map.html",
             mime="text/html",
         )
