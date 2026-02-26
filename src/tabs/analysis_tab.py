@@ -256,9 +256,8 @@ def calculate_fd_classical(dv: Optional[int]) -> None:
     fig = plot_fundamental_diagram_all_mpl(densities, speeds)
     fig.savefig(figname, bbox_inches="tight", pad_inches=0.1)
     st.pyplot(fig)
-    st.info(figname)
+    st.info(figname.name)
     download_file(figname)
-    # plots.show_fig(fig, figname=figname, html=True, write=True)
 
 
 def calculate_fd_voronoi_local(dv: Optional[int]) -> None:
