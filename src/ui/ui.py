@@ -55,10 +55,10 @@ def init_app_looks() -> None:
 
 
 def init_sidebar() -> Any:
-    """Init sidebar and 5 tabs.
+    """
+    Init sidebar and 5 tabs.
 
-    To add more tabs, add the name of the tab and add an icon from
-    https://icons.getbootstrap.com/
+    To add more tabs, add the name of the tab and add an icon from https://icons.getbootstrap.com/
     """
     # Custom CSS to handle multi-line text alignment and indentation
     st.markdown(

@@ -570,7 +570,7 @@ def main() -> None:
             )
             histogram_filename = data_directory / f"histogram_{bins}.pdf"
             # Display the histgram in the first column
-            st.pyplot(histogram_fig, clear_figure=True)
+            st.pyplot(histogram_fig, clear_figure=False)
             # Save the histogram to a BytesIO object in PDF format
             histogram_buffer = BytesIO()
             histogram_fig.savefig(histogram_buffer, format="pdf")
