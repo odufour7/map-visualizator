@@ -462,15 +462,10 @@ def calculate_density_profile(
     selected_file: str,
 ) -> None:
     """Calculate density profiles based on different methods."""
-    # chose_method = st.sidebar.radio(
-    #     "Method",
-    #     ["Gaussian", "Classic"],
-    #     help="See [PedPy-documentation](https://pedpy.readthedocs.io/en/latest/user_guide.html#density-profiles).",
-    # )
     with st.expander("Documentation"):
         st.write(
             "This profile is using 'Gaussian density profile' from [PedPy]"
-            + "(https://pedpy.readthedocs.io/en/latest/user_guide.html#density-profiles)."
+            + "(https://pedpy.readthedocs.io/stable/api/methods.html#profile_calculator.DensityMethod.GAUSSIAN)."
         )
     chose_method = "Gaussian"
     chose_method = str(chose_method)
