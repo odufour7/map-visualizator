@@ -558,7 +558,7 @@ def calculate_speed_profile(
     with st.expander("Documentation"):
         st.write(
             "This profile is using 'Gaussian speed profile' from [PedPy]"
-            + "(https://pedpy.readthedocs.io/en/latest/user_guide.html#speed-profiles)."
+            + "(https://pedpy.readthedocs.io/stable/api/methods.html#profile_calculator.SpeedMethod.GAUSSIAN)."
         )
     grid_size = st.sidebar.number_input(
         "Grid size",
