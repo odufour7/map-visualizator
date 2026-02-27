@@ -556,7 +556,7 @@ def update_figure(
             zmin=pa.COLORBAR_MIN,  # Set the minimum value of the colorbar
             zmax=pa.COLORBAR_MAX,  # Set the maximum value of the colorbar
             zsmooth=zsmooth,  # Apply smoothing with 'best' interpolation
-            colorbar={"title": "Density [ped/m²]", "titleside": "right"},
+            colorbar={"title": "Density [ped/m²]", "title_side": "right"},
             hoverinfo="text",  # Set hoverinfo to display just the hovertext
             hovertext=hovertext,  # Include hovertext
         )
@@ -581,7 +581,7 @@ def update_figure(
             zmin=pa.COLORBAR_MIN,  # Set the minimum value of the colorbar
             zmax=pa.COLORBAR_MAX_V,  # Set the maximum value of the colorbar
             zsmooth=zsmooth,  # Apply smoothing with 'best' interpolation
-            colorbar={"title": "Var_v [m²/s²]", "titleside": "right"},
+            colorbar={"title": "Var_v [m²/s²]", "title_side": "right"},
             hoverinfo="text",  # Set hoverinfo to display just the hovertext
             hovertext=hovertext,  # Include hovertext
         )
@@ -767,37 +767,59 @@ def main(selected_file: str) -> None:
             plot_density=True,
             zsmooth=st.session_state["zsmooth"],
         )
-        st.plotly_chart(fig)
+        st.plotly_chart(fig, width="stretch")
         figname = (
             pa.SELECTED_NAME
-            + f"_velocity_field_for_density_heatmap_zsmooth{st.session_state['zsmooth']}.pdf"
+            + f"_density_heatmap_zsmooth{st.session_state['zsmooth']}.html"
         )
-        img_bytes = fig.to_image(format="pdf")
+        html_str = fig.to_html(full_html=True, include_plotlyjs="cdn")
         st.sidebar.download_button(
-            label="Download Density Heatmap", data=img_bytes, file_name=figname
+            label="Download Density Heatmap (HTML)",
+            data=html_str,
+            file_name=figname,
+            mime="text/html",
+            key="download_density_html",
         )
-        plt.close()
+
     with col2:
         fig = update_figure(
             dict_observables, params, False, st.session_state["zsmooth"]
         )
-        st.plotly_chart(fig)
+        st.plotly_chart(fig, width="stretch")
         figname = (
             pa.SELECTED_NAME
-            + f"_velocity_field_for_density_heatmap_zsmooth{st.session_state['zsmooth']}.pdf"
+            + f"_variance_heatmap_zsmooth{st.session_state['zsmooth']}.html"
         )
-        img_bytes = fig.to_image(format="pdf")
+        html_str = fig.to_html(full_html=True, include_plotlyjs="cdn")
         st.sidebar.download_button(
-            label="Download Variance Heatmap", data=img_bytes, file_name=figname
+            label="Download Variance Heatmap (HTML)",
+            data=html_str,
+            file_name=figname,
+            mime="text/html",
+            key="download_variance_html",
         )
-        plt.close()
+
+    # with col1:
+    #     fig = update_figure(
+    #         df_observables=dict_observables,
+    #         pa=params,
+    #         plot_density=True,
+    #         zsmooth=st.session_state["zsmooth"],
+    #     )
+    #     st.plotly_chart(fig)
+    #     figname = pa.SELECTED_NAME + f"_velocity_field_for_density_heatmap_zsmooth{st.session_state['zsmooth']}.pdf"
+    #     img_bytes = fig.to_image(format="pdf")
+    #     st.sidebar.download_button(label="Download Density Heatmap", data=img_bytes, file_name=figname)
+    #     plt.close()
+    # with col2:
+    #     fig = update_figure(dict_observables, params, False, st.session_state["zsmooth"])
+    #     st.plotly_chart(fig)
+    #     figname = pa.SELECTED_NAME + f"_velocity_field_for_density_heatmap_zsmooth{st.session_state['zsmooth']}.pdf"
+    #     img_bytes = fig.to_image(format="pdf")
+    #     st.sidebar.download_button(label="Download Variance Heatmap", data=img_bytes, file_name=figname)
+    #     plt.close()
 
 
 def run_cctv_analysis(selected_file: str) -> None:
-    """
-    Run the animation tab with the selected file.
-
-    Args:
-        selected_file (str): The path of the selected file.
-    """
+    """Run the animation tab with the selected file."""
     main(selected_file)
