@@ -83,6 +83,8 @@ def create_animation_plotly(
         pd_trajs (pd.DataFrame): DataFrame containing the pedestrian trajectory data.
         pd_geometry (pd.DataFrame): DataFrame containing geometric data for obstacles.
         show_polygons (bool): Flag to show polygons on the map.
+        min_velocity (float): Minimum velocity for color scaling in the animation.
+        max_velocity (float): Maximum velocity for color scaling in the animation.
 
     Returns:
         Figure: Plotly figure object with the pedestrian movement animation.
@@ -260,7 +262,16 @@ def compute_pedestrian_velocity(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def adjust_time(df: pd.DataFrame, max_time: float) -> pd.DataFrame:
-    """Adjust the time values in the DataFrame to be less than max_time."""
+    """
+    Adjust the time values in the DataFrame to be less than max_time.
+
+    Args:
+        df (pd.DataFrame): DataFrame containing the time values to be adjusted.
+        max_time (float): The maximum time value to filter the DataFrame.
+
+    Returns:
+        pd.DataFrame: DataFrame with adjusted time values, filtered to be less than max_time and greater than 0.
+    """
     # Subtract the initial time value from all time values and round them
     df["t/s"] = (df["t/s"] - df["t/s"].iloc[0]).round(1)
     # Filter the DataFrame to keep only rows where 't/s' is less than max_time and greater than 0
@@ -306,6 +317,8 @@ def prepare_data(
 
     Args:
         traj_path (Path): The path to the directory containing trajectory files.
+        geometry_path (Path): The path to the directory containing geometry files.
+        selected_traj_file (Path): The path to the selected trajectory file to be processed.
     """
 
     selected_pickle = str(
@@ -494,10 +507,5 @@ def main(selected_file: str) -> None:
 
 
 def run_tab_animation(selected_file: str) -> None:
-    """
-    Run the animation tab with the selected file.
-
-    Args:
-        selected_file (str): The path of the selected file.
-    """
+    """Run the animation tab with the selected file."""
     main(selected_file)

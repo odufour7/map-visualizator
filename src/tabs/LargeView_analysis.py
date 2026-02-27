@@ -1,4 +1,4 @@
-"""This script computes the density and velocity fields from the trajectories of pedestrians."""
+"""Computes the density and velocity fields from the trajectories of pedestrians."""
 
 import logging
 import pickle
@@ -84,11 +84,11 @@ def calculate_distance(pos1: Tuple[float, float], pos2: Tuple[float, float]) -> 
     Calculate the distance between two points.
 
     Args:
-    - pos1 (Tuple[float, float]): The coordinates of the first point.
-    - pos2 (Tuple[float, float]): The coordinates of the second point.
+        pos1 (Tuple[float, float]): The coordinates of the first point.
+        pos2 (Tuple[float, float]): The coordinates of the second point.
 
     Returns:
-    - float: The distance between the two points.
+        float: The distance between the two points.
     """
     return float(np.sqrt((pos2[0] - pos1[0]) ** 2 + (pos2[1] - pos1[1]) ** 2))
 
@@ -121,14 +121,14 @@ def get_r(
     Calculate the coordinates (x, y) of a point in a grid based on its indices and grid parameters.
 
     Args:
-    - i_line (int): The index of the line in the grid.
-    - j_column (int): The index of the column in the grid.
-    - r_cg (float): The size of each grid cell.
-    - x_min (float): The minimum x-coordinate of the grid.
-    - y_min (float): The minimum y-coordinate of the grid.
+        i_line (int): The index of the line in the grid.
+        j_column (int): The index of the column in the grid.
+        r_cg (float): The size of each grid cell.
+        x_min (float): The minimum x-coordinate of the grid.
+        y_min (float): The minimum y-coordinate of the grid.
 
     Returns:
-    - Tuple[float, float]: The coordinates (x, y) of the point in the grid.
+        Tuple[float, float]: The coordinates (x, y) of the point in the grid.
     """
     return (i_line * r_cg + 0.5 * r_cg + x_min, j_column * r_cg + 0.5 * r_cg + y_min)
 
@@ -141,13 +141,13 @@ def get_cell(
     Return the cell indices corresponding to the given coordinates.
 
     Args:
-    r (tuple): The coordinates (x, y) of the point.
-    x_min (float): The minimum x-coordinate of the grid.
-    y_min: The minimum y-coordinate of the grid.
-    r_cg (float): The size of each cell in the grid.
+        r (tuple): The coordinates (x, y) of the point.
+        x_min (float): The minimum x-coordinate of the grid.
+        y_min (float): The minimum y-coordinate of the grid.
+        r_cg (float): The size of each cell in the grid.
 
     Returns:
-    Tuple[int, int]: The cell indices (i_line, j_column) corresponding to the given coordinates.
+        Tuple[int, int]: The cell indices (i_line, j_column) corresponding to the given coordinates.
     """
     i_line = int(floor((r[0] - x_min) / r_cg))
     j_column = int(floor((r[1] - y_min) / r_cg))
@@ -210,7 +210,6 @@ def create_save_folder(pa: Parameters) -> Path:
 
     Returns:
         Path: The path of the created save folder.
-
     """
     save_folder = (
         pa.FOLDER_SAVE
@@ -385,7 +384,6 @@ def calculate_grid_dimensions(pa: Parameters) -> None:
     Args:
         pa (Parameters): The parameters object containing the necessary information.
     """
-    # TODO: Oscar: Check conversion of the float Delta to int.
     pa.NB_CG_X = int((pa.X_MAX - pa.X_MIN) / pa.R_CG) + int(pa.DELTA) + 2
     pa.NB_CG_Y = int((pa.Y_MAX - pa.Y_MIN) / pa.R_CG) + int(pa.DELTA) + 2
 
@@ -423,6 +421,8 @@ def compute_fields(
         all_trajs (dict): A dictionary containing the trajectories.
         df_observables (Dict[str, NDArray[np.float64]]): A dictionary to store the computed observables.
         pa (Parameters): An object containing the parameters.
+        my_progress_bar (Any): A Streamlit progress bar object to update the progress.
+        status_text (Any): A Streamlit text object to update the status of the computation.
     """
     nb_traj = len(all_trajs)
     # Iterate over all trajectories
@@ -495,11 +495,11 @@ def normalize_density(
     Normalize the density array based on the given parameters.
 
     Args:
-    - density (NDArray[np.float64]): The density array to be normalized.
-    - pa (Parameters): The parameters object containing the necessary values.
+        density (NDArray[np.float64]): The density array to be normalized.
+        pa (Parameters): The parameters object containing the necessary values.
 
     Returns:
-    - NDArray[np.float64]: The normalized density array.
+        NDArray[np.float64]: The normalized density array.
     """
     N_nonrenormalised = pa.R_CG**2 * np.sum(density)
     density *= float(pa.CUM_TIME / pa.DURATION) / float(N_nonrenormalised)
@@ -519,6 +519,8 @@ def update_figure(
         df_observables (Dict[str, NDArray[np.float64]]): A dictionary containing the observables data.
             The keys are "X", "Y", "rho", "vxs", and "vys", and the values are numpy arrays.
         pa (Parameters): The parameters object containing the required parameters.
+        plot_density (bool): A boolean indicating whether to plot the density heatmap or the variance velocity heatmap.
+        zsmooth (bool, optional): A boolean indicating whether to apply smoothing to the heatmap. Defaults to False.
 
     Returns:
         go.Figure: The updated figure with the heatmap and quiver plot.
@@ -798,26 +800,6 @@ def main(selected_file: str) -> None:
             mime="text/html",
             key="download_variance_html",
         )
-
-    # with col1:
-    #     fig = update_figure(
-    #         df_observables=dict_observables,
-    #         pa=params,
-    #         plot_density=True,
-    #         zsmooth=st.session_state["zsmooth"],
-    #     )
-    #     st.plotly_chart(fig)
-    #     figname = pa.SELECTED_NAME + f"_velocity_field_for_density_heatmap_zsmooth{st.session_state['zsmooth']}.pdf"
-    #     img_bytes = fig.to_image(format="pdf")
-    #     st.sidebar.download_button(label="Download Density Heatmap", data=img_bytes, file_name=figname)
-    #     plt.close()
-    # with col2:
-    #     fig = update_figure(dict_observables, params, False, st.session_state["zsmooth"])
-    #     st.plotly_chart(fig)
-    #     figname = pa.SELECTED_NAME + f"_velocity_field_for_density_heatmap_zsmooth{st.session_state['zsmooth']}.pdf"
-    #     img_bytes = fig.to_image(format="pdf")
-    #     st.sidebar.download_button(label="Download Variance Heatmap", data=img_bytes, file_name=figname)
-    #     plt.close()
 
 
 def run_cctv_analysis(selected_file: str) -> None:

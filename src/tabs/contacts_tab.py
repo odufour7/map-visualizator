@@ -322,10 +322,7 @@ def load_data(path_pickle: Path) -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFra
 
 def initialize_map() -> folium.Map:
     """
-    Initialize the map centered on the middle point of Ludovic-Gardre1's first track.
-
-    Args:
-        all_gps_tracks (pd.DataFrame): DataFrame containing all GPS tracks.
+    Initialize the map.
 
     Returns:
         folium.Map: A folium map object.
@@ -389,6 +386,7 @@ def add_contact_markers(
     Args:
         map_object (folium.Map): The folium map object where markers will be added.
         contact_gps_merged (pd.DataFrame): DataFrame containing contact GPS merged data.
+        path_icon (str): The path to the directory containing the contact icon image.
     """
     for _, row in contact_gps_merged.iterrows():
         icon_person = folium.features.CustomIcon(
@@ -414,7 +412,7 @@ def plot_histogram(
                                       the x-axis and y-axis, respectively.
 
     Returns:
-        plt.Figure: The generated matplotlib Figure object.
+        pltFigure: The generated matplotlib Figure object.
     """
     # Remove the rows with zero collisions if log_plot is True
     if log_plot[0]:

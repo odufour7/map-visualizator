@@ -90,7 +90,9 @@ def create_map(
 
     Args:
         center (Tuple[float, float]): The center of the map (latitude, longitude).
-        zoom_start (int): The initial zoom level of the map.
+        selected_layer (str): The name of the selected map layer to use as the base map.
+        cameras (Dict[str, Camera]): A dictionary of Camera objects to be added to the map.
+        zoom (int, optional): The initial zoom level of the map. Defaults to 16.
 
     Returns:
         folium.Map: A folium map object.
