@@ -96,5 +96,5 @@ def about() -> None:
     st.markdown(text3)
     st.image(
         str(img_path_2),
-        caption="Emplacement of cameras for the video recording during the Festival of Lights 2022.",
+        caption="Location of cameras for the video recording during the Festival of Lights 2022.",
     )
